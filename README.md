@@ -6,20 +6,13 @@ We find, inspect and ship used cars from the US and Europe, and hand them over r
 
 ## Status
 
-In progress. The groundwork is done: brand colors and fonts, the contact form with Telegram delivery, metadata, tests and a Lighthouse check. The pages below are next.
+Live at https://transit-motors.vercel.app
 
-Pages:
+What is built:
 
-- [ ] Home
-- [ ] Cars in transit (6 cards)
-- [ ] Landed cost calculator
-- [ ] How it works
-- [ ] Reviews
-- [ ] Contact
-
-Features:
-
-- [ ] Landed cost estimate (car price, origin, engine type, shipping, duty percentage, fees) with demo rates kept in a typed config and labelled as an estimate
+- Home: cars in transit with shipping progress, how it works, reviews, FAQ and an enquiry form
+- Landed cost calculator (`/calculator`) with a full breakdown and delivery time; demo rates live in `lib/landed-cost.ts`
+- Contact page (`/contact`) that picks up the calculated estimate
 
 ## Design
 
@@ -73,11 +66,11 @@ Enquiries go to a Telegram chat. Copy `.env.example` to `.env.local` and fill in
 
 ## Deploying
 
-Import the repository in Vercel and add the two Telegram variables if the form should deliver leads. Update `url` in `content/site.ts` once the site has its final domain.
+Import the repository in Vercel and add the two Telegram variables if the form should deliver leads. If the domain changes, update `url` in `content/site.ts` and `tests/metadata.test.ts`.
 
 ## Credits
 
-Fonts are licensed under the SIL Open Font License; the license texts are in `app/fonts`. Photos will come from Unsplash and are credited in the site footer.
+Fonts are licensed under the SIL Open Font License; the license texts are in `app/fonts`. Photos are hotlinked from Unsplash and credited in the site footer.
 
 ## License
 

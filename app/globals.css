@@ -46,9 +46,11 @@ h3 {
   line-height: 1.15;
 }
 
-a {
-  color: var(--link);
-  text-underline-offset: 0.2em;
+@layer base {
+  a {
+    color: var(--link);
+    text-underline-offset: 0.2em;
+  }
 }
 
 :focus-visible {
@@ -144,4 +146,48 @@ a {
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+}
+
+/* Transit Motors: hard diagonals cut every section edge. */
+.slant-bottom {
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 4vw), 0 100%);
+}
+
+.slant-top {
+  clip-path: polygon(0 4vw, 100% 0, 100% 100%, 0 100%);
+}
+
+.btn-slant {
+  display: inline-block;
+  padding: 0.7rem 1.4rem;
+  background: var(--accent);
+  color: var(--on-accent);
+  font-weight: 700;
+  text-decoration: none;
+  clip-path: polygon(10px 0, 100% 0, calc(100% - 10px) 100%, 0 100%);
+}
+
+.btn-slant:hover {
+  background: #b8211d;
+}
+
+.btn-outline {
+  display: inline-block;
+  padding: 0.65rem 1.3rem;
+  border: 1.5px solid var(--fg);
+  color: var(--fg);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.stripe {
+  background: repeating-linear-gradient(-60deg, var(--accent) 0 6px, transparent 6px 14px);
+}
+
+.photo-credits a {
+  color: inherit;
+}
+
+details > summary::-webkit-details-marker {
+  display: none;
 }

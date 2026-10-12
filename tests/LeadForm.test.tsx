@@ -103,4 +103,14 @@ describe("LeadForm", () => {
     expect(honeypot).toHaveAttribute("autocomplete", "off");
     expect(honeypot?.closest('[aria-hidden="true"]')).not.toBeNull();
   });
+
+  test("prefills the message from defaultMessage", () => {
+    render(<LeadForm action={resolvingTo({ status: "idle" })} defaultMessage="Estimate: 8 kW heat pump" />);
+    expect(screen.getByLabelText(/message/i)).toHaveValue("Estimate: 8 kW heat pump");
+  });
+
+  test("uses a custom submit label", () => {
+    render(<LeadForm action={resolvingTo({ status: "idle" })} submitLabel="Request a quote" />);
+    expect(screen.getByRole("button", { name: "Request a quote" })).toBeInTheDocument();
+  });
 });

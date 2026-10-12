@@ -6,6 +6,9 @@ import { HONEYPOT_FIELD, type FormState, type Lead } from "@/lib/lead";
 
 type LeadFormProps = {
   action: (prev: FormState, data: FormData) => Promise<FormState>;
+  /** Prefills the message, e.g. with an estimate the visitor just calculated. */
+  defaultMessage?: string;
+  submitLabel?: string;
 };
 
 const initialState: FormState = { status: "idle" };
@@ -18,11 +21,11 @@ const honeypotStyle = {
   overflow: "hidden",
 } as const;
 
-function SubmitButton() {
+function SubmitButton({ label }: { label: string }) {
   const { pending } = useFormStatus();
   return (
-    <button type="submit" className="lead-form__submit" disabled={pending} aria-disabled={pending}>
-      {pending ? "Sending…" : "Send message"}
+    <button type="submit" className="lead-form__submit" disabled={pending}>
+      {pending ? "Sending…" : label}
     </button>
   );
 }
@@ -69,7 +72,7 @@ function Field({ name, label, error, defaultValue, multiline, type = "text", aut
   );
 }
 
-export function LeadForm({ action }: LeadFormProps) {
+export function LeadForm({ action, defaultMessage, submitLabel = "Send message" }: LeadFormProps) {
   const [state, formAction] = useActionState(action, initialState);
   const errors = state.errors ?? {};
   const values = state.values;
@@ -85,14 +88,20 @@ export function LeadForm({ action }: LeadFormProps) {
         error={errors.email}
         defaultValue={values?.email}
       />
-      <Field name="message" label="Message" multiline error={errors.message} defaultValue={values?.message} />
+      <Field
+        name="message"
+        label="Message"
+        multiline
+        error={errors.message}
+        defaultValue={values?.message ?? defaultMessage}
+      />
 
       <div aria-hidden="true" style={honeypotStyle}>
         <label htmlFor="lead-website">Leave this field empty</label>
         <input id="lead-website" type="text" name={HONEYPOT_FIELD} tabIndex={-1} autoComplete="off" />
       </div>
 
-      <SubmitButton />
+      <SubmitButton label={submitLabel} />
 
       <p role="status" aria-live="polite" className="lead-form__status">
         {state.status === "sent" ? "Thank you. Your message is on its way and we'll reply soon." : null}
