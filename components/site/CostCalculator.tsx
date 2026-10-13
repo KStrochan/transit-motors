@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useId, useState } from "react";
+import { Odometer } from "@/components/anim/Odometer";
 import { formatUsd, landedCost, type Engine, type LandedCostInput, type Origin } from "@/lib/landed-cost";
 
 const ORIGINS: { value: Origin; label: string }[] = [
@@ -88,7 +89,9 @@ export function CostCalculator() {
         <div className="flex items-baseline justify-between gap-4 border-b border-border p-6">
           <div>
             <p className="text-sm text-muted">Landed price</p>
-            <p className="font-display text-5xl font-extrabold italic tabular-nums">{formatUsd(result.total)}</p>
+            <p className="font-display text-5xl font-extrabold italic tabular-nums">
+              <Odometer value={formatUsd(result.total)} />
+            </p>
           </div>
           <p className="text-right text-sm text-muted">
             Delivery

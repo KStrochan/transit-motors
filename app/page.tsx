@@ -3,6 +3,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { submitLead } from "@/app/actions";
 import { LeadForm } from "@/components/LeadForm";
+import { Counter } from "@/components/anim/Counter";
+import { Reveal } from "@/components/anim/Reveal";
+import { ScrollProgress } from "@/components/anim/ScrollProgress";
+import { PlayWhenVisible } from "@/components/anim/PlayWhenVisible";
+import { ShippingRoutes } from "@/components/anim/ShippingRoutes";
 import { TransitCard } from "@/components/site/TransitCard";
 import { carsInTransit, faqs, photos, reviews, steps } from "@/content/home";
 import { site } from "@/content/site";
@@ -44,11 +49,15 @@ export default function HomePage() {
           <dl className="mt-6 grid max-w-2xl grid-cols-3 gap-6 border-t border-fg/20 pt-6">
             <div>
               <dt className="text-xs text-muted">Cars delivered</dt>
-              <dd className="font-display text-3xl font-bold">860+</dd>
+              <dd className="font-display text-3xl font-bold">
+                <Counter value={860} suffix="+" />
+              </dd>
             </div>
             <div>
               <dt className="text-xs text-muted">Average saving</dt>
-              <dd className="font-display text-3xl font-bold">19%</dd>
+              <dd className="font-display text-3xl font-bold">
+                <Counter value={19} suffix="%" />
+              </dd>
             </div>
             <div>
               <dt className="text-xs text-muted">From the US</dt>
@@ -66,18 +75,23 @@ export default function HomePage() {
               Bought for clients and on their way now. Prices include every cost up to the handover.
             </p>
           </div>
-          <span aria-hidden="true" className="stripe hidden h-8 w-40 sm:block" />
+          <PlayWhenVisible as="span" className="hidden sm:block">
+            <span aria-hidden="true" className="stripe block h-8 w-40" />
+          </PlayWhenVisible>
         </div>
-        <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {carsInTransit.map((car) => (
-            <TransitCard key={car.model} car={car} />
+        <PlayWhenVisible className="mt-10">
+          <ShippingRoutes />
+        </PlayWhenVisible>
+        <div className="mt-5 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {carsInTransit.map((car, index) => (
+            <TransitCard key={car.model} car={car} delay={(index % 3) * 0.12} />
           ))}
         </div>
       </section>
 
       <section id="how-it-works" className="scroll-mt-8 bg-surface py-20">
-        <div className="mx-auto grid max-w-7xl gap-12 px-4 sm:px-6 lg:grid-cols-[1fr_1.1fr]">
-          <div className="grid content-start gap-6">
+        <div className="mx-auto grid max-w-7xl grid-cols-1 gap-12 px-4 sm:px-6 lg:grid-cols-[1fr_1.1fr]">
+          <div className="grid min-w-0 grid-cols-1 content-start gap-6">
             <h2 className="font-display text-4xl font-bold italic sm:text-5xl">How it works</h2>
             <Image
               src={unsplash(photos.inspection, 1200)}
@@ -96,19 +110,24 @@ export default function HomePage() {
               className="hidden aspect-[3/2] h-auto w-full bg-bg object-cover lg:block"
             />
           </div>
-          <ol className="grid content-start">
+          <ScrollProgress className="relative self-start" start={0.75} end={0.6}>
+            <span aria-hidden="true" className="absolute bottom-6 left-[1.1rem] top-12 w-0.5 bg-border">
+              <span className="scroll-grow-y block h-full w-full bg-accent" />
+            </span>
+            <ol className="relative grid content-start">
             {steps.map((step, index) => (
-              <li key={step.title} className="grid grid-cols-[3.5rem_1fr] gap-4 border-b border-border py-6 first:pt-0">
-                <span aria-hidden="true" className="font-display text-4xl font-extrabold italic text-accent">
+              <Reveal as="li" key={step.title} className="relative grid grid-cols-[3.5rem_1fr] gap-4 border-b border-border py-6 first:pt-0">
+                <span aria-hidden="true" className="relative z-10 self-start bg-surface pb-1 font-display text-4xl font-extrabold italic text-accent">
                   {index + 1}
                 </span>
                 <div className="grid gap-2">
                   <h3 className="font-display text-2xl font-bold">{step.title}</h3>
                   <p className="text-muted">{step.text}</p>
                 </div>
-              </li>
+              </Reveal>
             ))}
-          </ol>
+            </ol>
+          </ScrollProgress>
         </div>
       </section>
 
